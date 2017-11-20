@@ -2,6 +2,8 @@ $(function () {
 
     console.log("Application sucessfully loaded!");
 
+    checkLocalStorageCapabilities();
+
     var $connectBtn = $('#connect');
     var $disconnectBtn = $('#disconnect').hide();
 
@@ -80,7 +82,7 @@ $(function () {
 
         console.log("start....");
 
-        eventSource = new EventSource('http://localhost:8080/stream');
+        eventSource = new EventSource('http://localhost:8080/stream?name=tutu');
 
         readyStateObservable  = Rx.Observable.interval(500);
 
@@ -129,6 +131,7 @@ $(function () {
         };
 
         eventSource.addEventListener('dateEvent', function(event) {
+
             console.log("onDateEvent !: ");
             console.log(event);
 
@@ -146,6 +149,15 @@ $(function () {
             $('#edt-date').html(msg.date);
             $('#edt-event-id').html(msg.eventId);
         }, false);
+    }
+
+
+    function checkLocalStorageCapabilities () {
+        if(typeof localStorage!='undefined') {
+            console.log('localStorage capabilities ok');
+        }else{
+            console.log('localStorage not supported');
+        }
     }
 
 });
