@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,11 +28,23 @@ public class WebController {
 
 
     @RequestMapping(path = "/stream", method = RequestMethod.GET)
-    public SseEmitter stream(HttpServletRequest request) throws IOException {
+    public SseEmitter stream(HttpServletRequest request,@RequestParam("name") String streamName) throws IOException {
 
-        LOGGER.info("/stream call received from client: " + request.getRemoteAddr());
+        LOGGER.info(String.format("/stream call received, client: %s, for stream name: %s"
+                ,request.getRemoteAddr(),streamName));
 
+        //Créaton de l'objet emetteur
         SSEEmeteur emeteur = new SSEEmeteur(request.getRemoteAddr());
+
+        switch (streamName){
+            case "tick":
+                break;
+
+            case "randomDate":
+                break;
+
+            default:
+        }
 
         emeteurs.add(emeteur);
 
@@ -45,9 +58,11 @@ public class WebController {
 
         });
 
+
+
         emeteur.onCompletion(() -> {
             emeteurs.remove(emeteur);
-            LOGGER.info("Emteur complete: " + emeteur.getIpAdresse());
+            LOGGER.info("Emeteur complete: " + emeteur.getIpAdresse());
         });
 
         return emeteur;

@@ -59,7 +59,7 @@ public class InternalEventToSSE {
 
                 emitter.send(event);
 
-                LOGGER.info("Sending" + event);
+                LOGGER.info("Sending" + event.toString());
             } catch (IOException e) {
 
                 LOGGER.info("Emitter dead: " + emitter.toString());

@@ -14,9 +14,9 @@ public abstract class Event {
     protected LocalDateTime date;
     protected String eventId;
 
-    public Event () {
+    public Event (String eventId) {
         this.date = LocalDateTime.now();
-        this.eventId = UUID.randomUUID().toString();
+        this.eventId = eventId;
     }
 
     public String id() {
